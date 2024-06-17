@@ -1,0 +1,83 @@
+# On push to PRs Build poetry env with caching and run tests
+
+name: Unit Tests
+
+# Run on pushes to main or PRs, or a manual trigger
+on:
+  pull_request:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+env:
+  PYTHON_VERSION: 3.12.2 # use exact version here to avoid restoring broken caches
+  POETRY_VERSION: 1.8.3
+
+jobs:
+
+  test:
+    timeout-minutes: 30
+
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ ubuntu-latest ]  # windows-latest, macOS-latest - disabled by default because it's charged at 10x the cost
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+      # check-out repo and set-up python
+      - name: Check out repository
+        uses: actions/checkout@v2
+        with:
+          lfs: true
+
+      # Manual Large File System fetch - workaround for github bug: https://github.com/actions/checkout/issues/270
+      - name: Fetch large files from lfs
+        run: |
+          git lfs fetch --all
+          git lfs checkout
+
+      - name: Set up python
+        id: setup-python
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      # Try to load poetry installation from cache
+      - name: Load cached Poetry installation
+        id: cached-poetry
+        uses: actions/cache@v3
+        with:
+          path: ~/.local  # the path depends on the OS
+          key: poetry-${{ env.POETRY_VERSION }}  # change/increment key to reset cache
+
+      # install & configure poetry
+      - name: Install Poetry
+        run: |
+          pip install --user pipx
+          pipx install poetry==${{ env.POETRY_VERSION }}
+          poetry config virtualenvs.in-project true # necessary for .venv/ caching
+
+      # load cached venv if cache exists
+      - name: Load cached venv
+        id: cached-poetry-dependencies
+        uses: actions/cache@v2
+        if: runner.os != 'Windows' # caching breaks on windows, known bug
+        with:
+          path: .venv
+          key: venv-${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('**/poetry.lock') }}
+
+      # install dependencies if cache does not exist
+      - name: Install dependencies
+        if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true' || runner.os == 'Windows' # install if cache miss or on windows (never caches)
+        run: poetry install --no-interaction --sync --all-extras
+
+      # run test suite
+      - name: Run tests
+        run: |
+          poetry run pre-commit run --color never
+          poetry run pytest
