@@ -1,3 +1,5 @@
+<!--- Eraser file: https://app.eraser.io/workspace/zZtzZVsOfe2tPh4iwqKp --->
+
 # Demand Forecasting for Electric Vehicles (EV)
 
 This project focuses on developing various tools for energy demand forecasting, specifically tailored for electric vehicles (EV). The goal is to accurately predict the energy demand of EVs to optimize energy distribution, improve grid stability, and support the integration of renewable energy sources.
@@ -54,3 +56,11 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 - This project utilizes data and insights from various public sources related to energy consumption and electric vehicles.
 - Special thanks to the open-source community for providing the tools and libraries that make this project possible.
+=======
+<p><a target="_blank" href="https://app.eraser.io/workspace/zZtzZVsOfe2tPh4iwqKp" id="edit-in-eraser-github-link"><img alt="Edit in Eraser" src="https://firebasestorage.googleapis.com/v0/b/second-petal-295822.appspot.com/o/images%2Fgithub%2FOpen%20in%20Eraser.svg?alt=media&amp;token=968381c8-a7e7-472a-8ed6-4a6626da5501"></a></p>
+
+# demand-forecasting
+Various tools for energy demand forecasting
+
+
+
