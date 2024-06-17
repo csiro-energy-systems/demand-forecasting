@@ -4,7 +4,8 @@ version = "0.1.0"
 description = "CER Uptake Forecasting Tool"
 authors = ["David Green <d.green@csiro.au>"]
 readme = "README.md"
-packages = [{include = "demand_forecasting"}]
+packages = [{ include = "adoption_model", from = "src" }]
+
 
 [tool.poetry.dependencies]
 python = "^3.12"
