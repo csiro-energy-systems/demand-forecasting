@@ -1,6 +1,8 @@
 import pandas as pd
 import pytest
-from adoption_model import get_payback_period, get_total_cost, get_savings_per_year
+
+from adoption_model.adoption_model import get_total_cost
+
 
 # Test data setup can be done using fixtures in pytest
 @pytest.fixture

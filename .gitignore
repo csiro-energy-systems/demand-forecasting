@@ -129,3 +129,5 @@ cython_debug/
 # It is generally recommended to include poetry.lock in version control for applications.
 # For libraries, it might be ignored to allow installation against latest compatible versions.
 # poetry.lock
+.idea
+.python-version
